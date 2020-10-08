@@ -22,7 +22,7 @@
 
     <groupId>com.ubirch.util</groupId>
     <artifactId>ubirch-mongo-utils_${scala.major.version}</artifactId>
-    <version>0.9.5</version>
+    <version>0.9.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <licenses>
@@ -76,8 +76,8 @@
         <scala.compat.version>2.11</scala.compat.version>
         <scalatest.version>3.0.5</scalatest.version>
 
-        <ubirch-config.version>0.2.4</ubirch-config.version>
-        <ubirch-deep-check.version>0.4.1</ubirch-deep-check.version>
+        <ubirch-config.version>0.2.5-SNAPSHOT</ubirch-config.version>
+        <ubirch-deep-check.version>0.4.2-SNAPSHOT</ubirch-deep-check.version>
         <akka.version>2.5.11</akka.version>
         <reactivemongo.version>0.18.8</reactivemongo.version>
         <joda-time.version>2.10</joda-time.version>
@@ -207,7 +207,7 @@
         </repository>
         <repository>
             <id>io.cloudrepo</id>
-            <url>https://ubirch.mycloudrepo.io/public/repositories/ubirch-utils-mvn</url>
+            <url>https://ubirch.mycloudrepo.io/public/repositories/mvn-public</url>
         </repository>
     </repositories>
 
@@ -216,7 +216,7 @@
         <repository>
             <id>io.cloudrepo</id>
             <name>Ubirch Public Cloud Repo Repository</name>
-            <url>https://ubirch.mycloudrepo.io/repositories/ubirch-utils-mvn</url>
+            <url>https://ubirch.mycloudrepo.io/repositories/mvn-public</url>
         </repository>
     </distributionManagement>
 
