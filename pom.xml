@@ -208,6 +208,10 @@
         <repository>
             <id>io.cloudrepo.public</id>
             <url>https://ubirch.mycloudrepo.io/public/repositories/mvn-public</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
 
