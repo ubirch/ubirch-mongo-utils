@@ -2,21 +2,23 @@ package com.ubirch.util.mongo
 
 import com.ubirch.util.mongo.connection.Connection
 import com.ubirch.util.mongo.connection.Exceptions.GettingConnectionException
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, FeatureSpec, Matchers}
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatestplus.mockito.MockitoSugar
 
 import scala.language.postfixOps
 
 class ConnectionSpec
-  extends FeatureSpec
+  extends AnyFeatureSpec
     with BeforeAndAfterEach
     with BeforeAndAfterAll
     with Matchers
     with MockitoSugar {
 
-  feature("A ConnectionSpec") {
+  Feature("A ConnectionSpec") {
 
-    scenario("Connection.get fails when prefix key is empty or non-existent") {
+    Scenario("Connection.get fails when prefix key is empty or non-existent") {
 
       assertThrows[GettingConnectionException](Connection.get(""))
 
@@ -25,7 +27,7 @@ class ConnectionSpec
 
     }
 
-    scenario("Connection.connIsActive checks if the logical connection has been created (POOL)") {
+    Scenario("Connection.connIsActive checks if the logical connection has been created (POOL)") {
 
       val connection = Connection.get()
 

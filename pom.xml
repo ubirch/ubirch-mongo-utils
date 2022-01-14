@@ -71,21 +71,22 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
 
-        <scala.major.version>2.11</scala.major.version>
-        <scala.version>2.11.12</scala.version>
-        <scala.compat.version>2.11</scala.compat.version>
-        <scalatest.version>3.0.5</scalatest.version>
+        <scala.major.version>2.13</scala.major.version>
+        <scala.version>2.13.6</scala.version>
+        <scala.compat.version>2.13</scala.compat.version>
+        <scalatest.version>3.2.10</scalatest.version>
 
         <ubirch-config.version>0.2.5-SNAPSHOT</ubirch-config.version>
         <ubirch-deep-check.version>0.4.2-SNAPSHOT</ubirch-deep-check.version>
-        <akka.version>2.5.11</akka.version>
+        <akka.version>2.6.18</akka.version>
         <reactivemongo.version>0.18.8</reactivemongo.version>
-        <joda-time.version>2.10</joda-time.version>
-        <joda-convert.version>2.1.1</joda-convert.version>
-        <mockito.version>2.23.4</mockito.version>
-        <scala-logging.version>3.7.2</scala-logging.version>
-        <slf4j.version>1.7.21</slf4j.version>
-        <logback.version>1.1.7</logback.version>
+        <joda-time.version>2.10.13</joda-time.version>
+        <joda-convert.version>2.2.2</joda-convert.version>
+        <mockito.version>4.2.0</mockito.version>
+        <mockito-sugar.version>3.2.10.0</mockito-sugar.version>
+        <scala-logging.version>3.9.4</scala-logging.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <logback.version>1.2.10</logback.version>
 
         <!-- plugins -->
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
@@ -156,6 +157,14 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatestplus</groupId>
+            <artifactId>mockito-3-12_${scala.compat.version}</artifactId>
+            <version>${mockito-sugar.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
