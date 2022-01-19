@@ -1,20 +1,21 @@
 package com.ubirch.util.mongo.format
 
-import java.util.UUID
-
-import org.scalatest.{FeatureSpec, Matchers}
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
 import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
+
+import java.util.UUID
 
 /**
   * author: cvandrei
   * since: 2017-04-05
   */
-class MongoFormatsSpec extends FeatureSpec
+class MongoFormatsSpec extends AnyFeatureSpec
   with Matchers {
 
-  feature("UUIDWriter.read()") {
+  Feature("UUIDWriter.read()") {
 
-    scenario("simple BSONDocument w/o UUID") {
+    Scenario("simple BSONDocument w/o UUID") {
 
       // prepare
       val id = java.util.UUID.randomUUID().toString
@@ -28,7 +29,7 @@ class MongoFormatsSpec extends FeatureSpec
 
     }
 
-    scenario("simple BSONDocument w/ UUID") {
+    Scenario("simple BSONDocument w/ UUID") {
 
       // prepare
       val id = java.util.UUID.randomUUID()
