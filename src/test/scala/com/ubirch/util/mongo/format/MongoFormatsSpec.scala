@@ -5,7 +5,6 @@ import org.scalatest.matchers.should.Matchers
 import reactivemongo.api.bson.{ document, BSONDocument, BSONDocumentHandler, Macros }
 
 import java.util.UUID
-import scala.util.Try
 
 /**
   * author: cvandrei
@@ -36,7 +35,7 @@ class MongoFormatsSpec extends AnyFeatureSpec with Matchers {
       val model = ModelUUID(id)
 
       // test
-      val bson: Try[BSONDocument] = ModelUUID.modelUUIDHandler.writeTry(model)
+      val bson = ModelUUID.modelUUIDHandler.writeTry(model)
 
       // verify
       bson.isSuccess shouldBe true
