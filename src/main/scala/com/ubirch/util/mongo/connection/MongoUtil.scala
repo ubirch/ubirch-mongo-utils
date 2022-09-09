@@ -3,13 +3,13 @@ package com.ubirch.util.mongo.connection
 import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.mongo.config.MongoConfigKeys
-import reactivemongo.api.DefaultDB
-import reactivemongo.api.collections.bson.BSONCollection
-import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, document}
+import reactivemongo.api.DB
+import reactivemongo.api.bson.collection.BSONCollection
+import reactivemongo.api.bson.{ document, BSONDocumentReader, BSONDocumentWriter }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future, TimeoutException}
+import scala.concurrent.{ Await, Future, TimeoutException }
 import scala.language.postfixOps
 import scala.util.Try
 
@@ -21,8 +21,7 @@ class MongoUtil(configPrefix: String = MongoConfigKeys.PREFIX) extends StrictLog
 
   def conn: Connection = Connection.get(configPrefix)
 
-  def dbStub: DB = new DB(conn)
-
+  def dbStub: Database = new Database(conn)
 
   /**
     * Opens a database connection. Don't forget to call #close to free up all resources afterwards.
@@ -31,7 +30,7 @@ class MongoUtil(configPrefix: String = MongoConfigKeys.PREFIX) extends StrictLog
     *
     * @return database connection
     */
-  def db: Future[DefaultDB] = dbStub.db
+  def db: Future[DB] = dbStub.db
 
   /**
     * Connects us to a collection.
@@ -54,7 +53,9 @@ class MongoUtil(configPrefix: String = MongoConfigKeys.PREFIX) extends StrictLog
     * @return deep check response with _status:OK_ if ok; otherwise with _status:NOK_
     */
 
-  def connectivityCheck[T <: Any](collectionName: String)(implicit writer: BSONDocumentWriter[T], reader: BSONDocumentReader[T]): Future[DeepCheckResponse] = {
+  def connectivityCheck[T <: Any](collectionName: String)(
+    implicit writer: BSONDocumentWriter[T],
+    reader: BSONDocumentReader[T]): Future[DeepCheckResponse] = {
 
     if (checkConnection()) {
 
@@ -67,13 +68,13 @@ class MongoUtil(configPrefix: String = MongoConfigKeys.PREFIX) extends StrictLog
             .map(_ => DeepCheckResponse())
         }.recover {
 
-        case e: Exception =>
-          DeepCheckResponse(
-            status = false,
-            messages = Seq(e.getMessage)
-          )
+          case e: Exception =>
+            DeepCheckResponse(
+              status = false,
+              messages = Seq(e.getMessage)
+            )
 
-      }
+        }
     } else {
 
       logger.debug("DB Connection does not exist.")
@@ -120,13 +121,14 @@ class MongoUtil(configPrefix: String = MongoConfigKeys.PREFIX) extends StrictLog
 
     val checks = Try(Await.result(futureChecks, atMost)).recover {
       case e: TimeoutException =>
-
-        logger.error("(1) It is taking more than {} to retrieve checks. Got this error {} ", atMost.toString(), e.getMessage)
+        logger.error(
+          "(1) It is taking more than {} to retrieve checks. Got this error {} ",
+          atMost.toString(),
+          e.getMessage)
 
         false
 
       case e =>
-
         logger.error("Something went wrong when running checks. Got this: {} ", e.getMessage)
 
         false

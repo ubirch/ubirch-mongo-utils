@@ -4,17 +4,19 @@ import com.ubirch.util.mongo.connection.Connection
 import com.ubirch.util.mongo.connection.Exceptions.GettingConnectionException
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatestplus.mockito.MockitoSugar
 
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 class ConnectionSpec
   extends AnyFeatureSpec
-    with BeforeAndAfterEach
-    with BeforeAndAfterAll
-    with Matchers
-    with MockitoSugar {
+  with BeforeAndAfterEach
+  with BeforeAndAfterAll
+  with Matchers
+  with MockitoSugar {
 
   Feature("A ConnectionSpec") {
 
@@ -24,7 +26,6 @@ class ConnectionSpec
 
       assertThrows[GettingConnectionException](Connection.get("this.is.my.imaginary.path"))
 
-
     }
 
     Scenario("Connection.connIsActive checks if the logical connection has been created (POOL)") {
@@ -33,7 +34,7 @@ class ConnectionSpec
 
       Thread.sleep(3000)
 
-      assert(connection.connIsActive)
+      assert(Await.result(connection.connIsActive, 2.seconds))
 
       Thread.sleep(3000)
 
@@ -41,9 +42,7 @@ class ConnectionSpec
 
       Thread.sleep(3000)
 
-
     }
-
 
   }
 
