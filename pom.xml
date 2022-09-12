@@ -78,7 +78,7 @@
 
         <ubirch-config.version>0.2.5</ubirch-config.version>
         <ubirch-deep-check.version>0.4.2</ubirch-deep-check.version>
-        <akka.version>2.6.19</akka.version>
+        <akka.version>2.6.5</akka.version>
         <reactivemongo.version>1.0.10</reactivemongo.version>
         <joda-time.version>2.11.1</joda-time.version>
         <joda-convert.version>2.2.2</joda-convert.version>

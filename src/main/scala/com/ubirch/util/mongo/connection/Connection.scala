@@ -46,9 +46,18 @@ object Connection extends LazyLogging {
 
   private var connection: Option[Connection] = None
 
-  def get(configPrefix: String = MongoConfigKeys.PREFIX): Connection = synchronized {
-
+  def get(configPrefix: String = MongoConfigKeys.PREFIX): Connection =
     connection.orElse {
+      initConnection(configPrefix)
+    }.getOrElse {
+      val errorMessage = "(2) Something went wrong when getting Connection."
+      logger.error(errorMessage)
+      throw GettingConnectionException(errorMessage)
+    }
+
+  private def initConnection(configPrefix: String): Option[Connection] = synchronized {
+    if (connection.isDefined) connection
+    else {
       Try(new Connection(configPrefix)) match {
         case Success(conn) =>
           Try(Await.result(conn.conn, 5.seconds)).recover {
@@ -65,11 +74,6 @@ object Connection extends LazyLogging {
           logger.error(errorMessage)
           throw GettingConnectionException(errorMessage)
       }
-    }.getOrElse {
-      val errorMessage = "(2) Something went wrong when getting Connection."
-      logger.error(errorMessage)
-      throw GettingConnectionException(errorMessage)
     }
   }
-
 }

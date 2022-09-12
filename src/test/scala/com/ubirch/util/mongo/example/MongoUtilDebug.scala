@@ -14,7 +14,7 @@ object MongoUtilDebug extends App with StrictLogging {
 
   val mongo = new MongoUtil()
 
-  mongo.db map { db =>
+  mongo.db().map { db =>
     logger.info(s"connected to database: ${db.name}")
     logger.info("listing collection names")
     db.collectionNames map println
