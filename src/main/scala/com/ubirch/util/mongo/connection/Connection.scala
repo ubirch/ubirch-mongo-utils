@@ -7,8 +7,8 @@ import reactivemongo.api.MongoConnection.ParsedURI
 import reactivemongo.api.{ AsyncDriver, MongoConnection }
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.{ Await, Future }
 import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
@@ -37,6 +37,7 @@ class Connection private (configPrefix: String) extends ConnectionTrait {
   val driver: AsyncDriver = new reactivemongo.api.AsyncDriver
   val uri: String = MongoConfig.hosts(configPrefix)
   val parsedUri: Future[ParsedURI] = MongoConnection.fromString(uri)
+  val databaseName: Future[String] = parsedUri.map(_.db.getOrElse(throw NoDBNameFoundException("No DB Found in URI.")))
   val conn: Future[MongoConnection] = parsedUri.flatMap((uri: ParsedURI) => driver.connect(uri))
 
 }
@@ -50,6 +51,12 @@ object Connection extends LazyLogging {
     connection.orElse {
       Try(new Connection(configPrefix)) match {
         case Success(conn) =>
+          Try(Await.result(conn.conn, 5.seconds)).recover {
+            case ex =>
+              val msg = s"something went wrong connecting to the mongo database ${ex.getMessage}"
+              logger.error(msg, ex)
+              throw DatabaseConnectionException(msg)
+          }
           connection = Some(conn)
           connection
 
