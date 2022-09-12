@@ -2,7 +2,7 @@ package com.ubirch.util.mongo.format
 
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
-import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
+import reactivemongo.api.bson.{ document, BSONDocument, BSONDocumentHandler, Macros }
 
 import java.util.UUID
 
@@ -10,22 +10,21 @@ import java.util.UUID
   * author: cvandrei
   * since: 2017-04-05
   */
-class MongoFormatsSpec extends AnyFeatureSpec
-  with Matchers {
+class MongoFormatsSpec extends AnyFeatureSpec with Matchers {
 
   Feature("UUIDWriter.read()") {
 
     Scenario("simple BSONDocument w/o UUID") {
-
       // prepare
       val id = java.util.UUID.randomUUID().toString
       val bson: BSONDocument = document("id" -> id)
 
       // test
-      val model = bson.as[ModelString]
+      val model = ModelString.modelStringHandler.readTry(bson)
 
       // verify
-      model.id shouldBe id
+      model.isSuccess shouldBe true
+      model.get.id shouldBe id
 
     }
 
@@ -36,11 +35,15 @@ class MongoFormatsSpec extends AnyFeatureSpec
       val model = ModelUUID(id)
 
       // test
-      val bson = ModelUUID.modelUUIDWriter.write(model)
+      val bson = ModelUUID.modelUUIDHandler.writeTry(model)
 
       // verify
-      val modelResult = bson.as[ModelUUID]
-      modelResult shouldBe model
+      bson.isSuccess shouldBe true
+      val r = bson.get.getAsTry[String]("id").get
+      r shouldBe id.toString
+      val modelResult = ModelUUID.modelUUIDHandler.readTry(bson.get)
+      assert(modelResult.isSuccess)
+      modelResult.get shouldBe model
 
     }
 
@@ -51,13 +54,11 @@ class MongoFormatsSpec extends AnyFeatureSpec
 case class ModelString(id: String)
 
 object ModelString {
-  implicit def modelStringWriter: BSONDocumentWriter[ModelString] = Macros.writer[ModelString]
-  implicit def modelStringReader: BSONDocumentReader[ModelString] = Macros.reader[ModelString]
+  implicit val modelStringHandler: BSONDocumentHandler[ModelString] = Macros.handler[ModelString]
 }
 
 case class ModelUUID(id: UUID)
 
 object ModelUUID extends MongoFormats {
-  implicit def modelUUIDWriter: BSONDocumentWriter[ModelUUID] = Macros.writer[ModelUUID]
-  implicit def modelUUIDReader: BSONDocumentReader[ModelUUID] = Macros.reader[ModelUUID]
+  implicit val modelUUIDHandler: BSONDocumentHandler[ModelUUID] = Macros.handler[ModelUUID]
 }

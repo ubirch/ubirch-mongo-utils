@@ -22,7 +22,7 @@
 
     <groupId>com.ubirch.util</groupId>
     <artifactId>ubirch-mongo-utils_${scala.major.version}</artifactId>
-    <version>0.9.6</version>
+    <version>0.10.0</version>
     <packaging>jar</packaging>
 
     <licenses>
@@ -78,9 +78,9 @@
 
         <ubirch-config.version>0.2.5</ubirch-config.version>
         <ubirch-deep-check.version>0.4.2</ubirch-deep-check.version>
-        <akka.version>2.6.18</akka.version>
-        <reactivemongo.version>0.18.8</reactivemongo.version>
-        <joda-time.version>2.10.13</joda-time.version>
+        <akka.version>2.6.5</akka.version>
+        <reactivemongo.version>1.0.10</reactivemongo.version>
+        <joda-time.version>2.11.1</joda-time.version>
         <joda-convert.version>2.2.2</joda-convert.version>
         <mockito.version>4.2.0</mockito.version>
         <mockito-sugar.version>3.2.10.0</mockito-sugar.version>
@@ -96,6 +96,7 @@
         <maven-surefire-plugin.version>2.7</maven-surefire-plugin.version>
         <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
         <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
+        <maven-scalafmt.version>1.0.4</maven-scalafmt.version>
         <!-- plugins -->
 
     </properties>
@@ -351,6 +352,34 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+            <!-- code formatting -->
+            <plugin>
+                <groupId>org.antipathy</groupId>
+                <!-- The scala binary here doesn't need to match the project version -->
+                <artifactId>mvn-scalafmt_${scala.compat.version}</artifactId>
+                <!-- This represents the desired version of the plugin, whould be in the form:
+                     (major).(minor).(commitepoch).(commithash), which can be found here:
+                     https://github.com/simonjpegg/mvn_scalafmt/releases
+                     e.g. <version>1.0.1589620826.41b214a</version>
+                     Note: The SCALA version is OMITTED from this value
+                -->
+                <version>${maven-scalafmt.version}</version>
+                <configuration>
+                    <configLocation>https://raw.githubusercontent.com/ubirch/ubirch-scalafmt-rules/main/.scalafmt.conf
+                    </configLocation> <!-- path to config -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
   */
 trait MongoConstraintsBase extends StrictLogging {
 
-  val constraintsToCreate: Map[String, Set[Index]]
+  val constraintsToCreate: Map[String, Set[Index.Default]]
 
   val constraintsToDrop: Map[String, Set[String]]
 
@@ -23,10 +23,10 @@ trait MongoConstraintsBase extends StrictLogging {
     for (collectionName <- constraintsToCreate.keys) {
 
       mongo.collection(collectionName) map { collection =>
-
         for (constraint <- constraintsToCreate.getOrElse(collectionName, Set.empty)) {
-          collection.indexesManager.create(constraint) map { result =>
-            logger.info(s"createMongoConstraints() - collection=$collectionName, constraint=$constraint, result=$result")
+          collection.indexesManager.ensure(constraint) map { result =>
+            logger.info(
+              s"createMongoConstraints() - collection=$collectionName, constraint=$constraint, result=$result")
           }
         }
 
@@ -43,10 +43,10 @@ trait MongoConstraintsBase extends StrictLogging {
     for (collectionName <- constraintsToDrop.keys) {
 
       mongo.collection(collectionName) map { collection =>
-
         for (constraintName <- constraintsToDrop.getOrElse(collectionName, Set.empty)) {
           collection.indexesManager.drop(constraintName) map { result =>
-            logger.info(s"dropMongoConstraints() - collection=$collectionName, constraintName=$constraintName, result=$result")
+            logger.info(
+              s"dropMongoConstraints() - collection=$collectionName, constraintName=$constraintName, result=$result")
           }
         }
 

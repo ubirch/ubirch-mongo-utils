@@ -2,7 +2,7 @@ package com.ubirch.util.mongo.test
 
 import com.ubirch.util.mongo.connection.MongoUtil
 import reactivemongo.api.ReadConcern
-import reactivemongo.bson.BSONDocument
+import reactivemongo.api.bson.BSONDocument
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
