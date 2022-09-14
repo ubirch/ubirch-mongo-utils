@@ -10,7 +10,8 @@ import java.util.UUID
   * author: cvandrei
   * since: 2017-04-05
   */
-class MongoFormatsSpec extends AnyFeatureSpec with Matchers {
+
+class MongoFormatsSpec extends AnyFeatureSpec with MongoFormats with Matchers {
 
   Feature("UUIDWriter.read()") {
 
@@ -25,28 +26,20 @@ class MongoFormatsSpec extends AnyFeatureSpec with Matchers {
       // verify
       model.isSuccess shouldBe true
       model.get.id shouldBe id
-
     }
 
     Scenario("simple BSONDocument w/ UUID") {
-
       // prepare
       val id = java.util.UUID.randomUUID()
       val model = ModelUUID(id)
-
       // test
       val bson = ModelUUID.modelUUIDHandler.writeTry(model)
 
       // verify
-      bson.isSuccess shouldBe true
-      val r = bson.get.getAsTry[String]("id").get
-      r shouldBe id.toString
       val modelResult = ModelUUID.modelUUIDHandler.readTry(bson.get)
       assert(modelResult.isSuccess)
       modelResult.get shouldBe model
-
     }
-
   }
 
 }

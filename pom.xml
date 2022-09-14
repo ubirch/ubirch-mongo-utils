@@ -22,7 +22,7 @@
 
     <groupId>com.ubirch.util</groupId>
     <artifactId>ubirch-mongo-utils_${scala.major.version}</artifactId>
-    <version>0.10.0</version>
+    <version>0.10.1</version>
     <packaging>jar</packaging>
 
     <licenses>
