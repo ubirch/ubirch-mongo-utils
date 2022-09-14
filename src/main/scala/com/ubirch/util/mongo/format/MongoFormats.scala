@@ -13,6 +13,7 @@ import reactivemongo.api.bson.{
   Subtype
 }
 
+
 import java.nio.ByteBuffer
 import java.util.UUID
 import scala.util.Try
@@ -22,6 +23,7 @@ import scala.util.Try
   * since: 2017-04-04
   */
 trait MongoFormats {
+
 
   implicit protected object uuidHandler extends BSONHandler[UUID] {
     override def writeTry(id: UUID): Try[BSONValue] =
@@ -53,7 +55,8 @@ trait MongoFormats {
 
     override def writeTry(dateTime: DateTime): Try[BSONDateTime] =
       Try(BSONDateTime(dateTime.withZone(DateTimeZone.UTC).getMillis))
-  }
+
+
 
   implicit object BigIntHandler extends BSONDocumentReader[BigInt] with BSONDocumentWriter[BigInt] {
 

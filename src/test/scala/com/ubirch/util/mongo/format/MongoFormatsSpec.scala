@@ -10,6 +10,7 @@ import java.util.UUID
   * author: cvandrei
   * since: 2017-04-05
   */
+
 class MongoFormatsSpec extends AnyFeatureSpec with MongoFormats with Matchers {
 
   Feature("UUIDWriter.read()") {
